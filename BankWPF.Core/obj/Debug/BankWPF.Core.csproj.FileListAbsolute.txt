@@ -1,0 +1,7 @@
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\bin\Debug\BankWPF.Core.dll
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\bin\Debug\BankWPF.Core.pdb
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\bin\Debug\Ninject.dll
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\bin\Debug\Ninject.xml
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\obj\Debug\BankWPF.Core.dll
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\obj\Debug\BankWPF.Core.pdb
+C:\Users\MinorSonek\documents\visual studio 2017\Projects\BankWPF\BankWPF.Core\obj\Debug\BankWPF.Core.csprojResolveAssemblyReference.cache
