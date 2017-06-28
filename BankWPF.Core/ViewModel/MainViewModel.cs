@@ -94,6 +94,11 @@ namespace BankWPF.Core
             {
                 await Task.Delay(500);
 
+                // Reset error messages
+                ErrorNotInteger = false;
+                ErrorNotEnoughMoney = false;
+                ErrorWrongValue = false;
+
                 int valueToDeposit = 0;
 
                 // Try to parse user's input from textbox to integer
@@ -108,8 +113,6 @@ namespace BankWPF.Core
                     else
                     {
                         // Can't deposit negative or null value, output error
-                        ErrorNotInteger = false;
-                        ErrorNotEnoughMoney = false;
                         ErrorWrongValue = true;
                     }
                 }
@@ -117,8 +120,6 @@ namespace BankWPF.Core
                 {
                     // If failed, output error
                     ErrorNotInteger = true;
-                    ErrorNotEnoughMoney = false;
-                    ErrorWrongValue = false;
                 }
 
             });
@@ -135,6 +136,11 @@ namespace BankWPF.Core
             {
                 await Task.Delay(500);
 
+                // Reset error messages
+                ErrorNotInteger = false;
+                ErrorNotEnoughMoney = false;
+                ErrorWrongValue = false;
+
                 int valueToWithdraw = 0;
 
                 // Try to parse user's input from textbox to integer
@@ -149,8 +155,6 @@ namespace BankWPF.Core
                     else
                     {
                         // Can't withdraw negative or null value, output error
-                        ErrorNotInteger = false;
-                        ErrorNotEnoughMoney = false;
                         ErrorWrongValue = true;
                     }
                 }
@@ -158,8 +162,6 @@ namespace BankWPF.Core
                 {
                     // If failed, output error
                     ErrorNotInteger = true;
-                    ErrorNotEnoughMoney = false;
-                    ErrorWrongValue = false;
                 }
             });
         }

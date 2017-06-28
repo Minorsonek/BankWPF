@@ -63,12 +63,13 @@
                                 
                                 <!-- Transaction Date -->
                                 <TextBlock Text="{Binding Date}"
-                                                   Foreground="{StaticResource ForegroundDarkBrush}"
-                                                   VerticalAlignment="Top"
-                                                   HorizontalAlignment="Right"
-                                                   Grid.Column="1"
-                                                   FontFamily="{StaticResource LatoRegular}"
-                                                   />
+                                           Foreground="{StaticResource ForegroundDarkBrush}"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Right"
+                                           Grid.Column="1"
+                                           Margin="0 3 3 0"
+                                           FontFamily="{StaticResource LatoRegular}"
+                                           />
 
                             </Grid>
                         </Border>

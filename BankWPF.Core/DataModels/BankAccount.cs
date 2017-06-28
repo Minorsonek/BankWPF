@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace BankWPF.Core
 {
@@ -60,7 +61,10 @@ namespace BankWPF.Core
             // Inform user about successful operation
             //MessageBox.Show($"Zdepozytowano { value } zł.");
 
-            // Update current balance to database
+            // Upload new transaction to the database
+            UploadNewTransaction("Deposit", value);
+
+            // Update current balance to the database
             UpdateBalance();
         }
 
@@ -79,6 +83,9 @@ namespace BankWPF.Core
             // Inform user about successful operation
             //MessageBox.Show($"Wyplacono { value } zł.");
 
+            // Upload new transaction to the database
+            UploadNewTransaction("Withdraw", value);
+
             // Update current balance to database
             UpdateBalance();
         }
@@ -86,6 +93,24 @@ namespace BankWPF.Core
         #endregion
 
         #region Private Helpers
+
+        private void UploadNewTransaction(string paymentway, int value)
+        {
+            // Set webservice's url and parameters we want to send
+            string URI = "http://stacjapogody.lo2przemysl.edu.pl/bank/savetohistory/index.php?";
+            string myParameters = $"id={ Number }&depOrWit={ paymentway }&value={ value }";
+
+            string result = string.Empty;
+            // Send request to webservice
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                result = wc.UploadString(URI, myParameters);
+            }
+
+            // If something went wrong, output error
+            if (result != "Succeed") ;
+        }
 
         /// <summary>
         /// Balance in database updater

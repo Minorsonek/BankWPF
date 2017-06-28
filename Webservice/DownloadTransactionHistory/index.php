@@ -16,7 +16,7 @@
 		else
 		{
 			// Connected with database, try to find user
-			$result = $connection->query("SELECT * FROM transactions WHERE transactions.idaccount = '$idaccount' ORDER BY date DESC ");
+			$result = $connection->query("SELECT * FROM transactions WHERE idaccount = '$idaccount' ORDER BY date DESC ");
 			// If failed to send query, throw exception
 			if (!$result) throw new Exception($connection->error);
 			
@@ -24,13 +24,13 @@
 			$amount = mysqli_num_rows($result);
             
 			// Output this amount
-            echo "Found: ".$amount;
+            echo "Found: ".$amount."|";
 			
 			// Output every transaction
 			for ($i = 1; $i <= $amount; $i++) 
 			{
 				$row = mysqli_fetch_assoc($result);
-				echo $row['paymentway']."|".$row['value']."|".$row['date'];
+				echo $row['paymentway']."/".$row['value']."/".$row['date']."|";
 			}
 		}
 	}

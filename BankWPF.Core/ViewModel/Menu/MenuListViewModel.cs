@@ -10,6 +10,6 @@ namespace BankWPF.Core
         /// <summary>
         /// The menu list items for the list
         /// </summary>
-        public List<MenuListItemViewModel> Items { get; set; }
+        public static List<MenuListItemViewModel> Items { get; set; }  
     }
 }

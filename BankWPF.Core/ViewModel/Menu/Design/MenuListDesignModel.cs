@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 namespace BankWPF.Core
 {
@@ -49,7 +50,6 @@ namespace BankWPF.Core
                     ColorStringRGB = "00d405",
                     Date = "2017/11/20 11:06:18"
                 },
-                
             };
         }
 

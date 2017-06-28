@@ -23,7 +23,7 @@
 			if (!$result) throw new Exception($connection->error);
 			
 			// Output success
-			echo "Success";
+			echo "Succeed";
 		}
 	}
 	catch (Exception $ex)

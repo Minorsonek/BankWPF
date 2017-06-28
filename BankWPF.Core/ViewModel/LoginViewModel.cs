@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -147,9 +148,66 @@ namespace BankWPF.Core
             // Make new instance of BankAccount with user's data
             BankAccount.UserAccount = new BankAccount(balance, id, name);
 
+            // Download transactions history
+            DownloadTransactionsHistory(BankAccount.UserAccount.Number);
+
             // Return that we have found user
             return true;
 
+        }
+
+        private void DownloadTransactionsHistory(int number)
+        {
+            // Set webservice's url and parameters we want to send
+            string URI = "http://stacjapogody.lo2przemysl.edu.pl/bank/showhistory/index.php?";
+            string myParameters = $"id={ number }";
+
+            string result = string.Empty;
+            // Send request to webservice
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                result = wc.UploadString(URI, myParameters);
+            }
+
+            // If something went wrong, output error
+            if (result == "Found: 0") return;
+
+            // Add transactions to list
+            AddTransactionsToList(result);
+        }
+
+        private void AddTransactionsToList(string result)
+        {
+            // Split rows
+            string[] rowArray = result.Split('|');
+
+            // Get the amount of transactions (-1 from last empty row)
+            int amount = rowArray.GetLength(0) - 1;
+
+            for (int i = 1; i < amount; i++)
+            {
+                // Prepare data
+                // Split original row
+                string[] dataArray = rowArray[i].Split('/');
+                // The transaction's payment way
+                string TransactionMethod = dataArray[0];
+                // The transaction's value (positive or negative - depends on payment way)
+                string TransactionValue = TransactionMethod == "Deposit" ? dataArray[1] : "-" + dataArray[1];
+                // The transaction's date
+                string TransactionDate = dataArray[2];
+                
+                MenuListViewModel.Items.Add(
+                    new MenuListItemViewModel
+                    {
+                        Value = TransactionValue,
+                        DWLetter = TransactionMethod == "Deposit" ? "D" : "W",
+                        Message = "Temporary something",
+                        ColorStringRGB = TransactionMethod == "Deposit" ? "00d405" : "fe4503",
+                        Date = TransactionDate
+                    }
+                    );
+            }
         }
 
         #endregion
