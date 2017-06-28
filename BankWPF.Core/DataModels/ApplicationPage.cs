@@ -1,18 +1,23 @@
 ﻿namespace BankWPF.Core
 {
     /// <summary>
-    /// The current page of the application
+    /// A page of the application
     /// </summary>
     public enum ApplicationPage
     {
         /// <summary>
         /// The initial login page
         /// </summary>
-        Login = 1,
+        Login = 0,
 
         /// <summary>
-        /// The applicaion main page
+        /// The main bank page
         /// </summary>
-        Main = 2
+        Main = 1,
+
+        /// <summary>
+        /// The register page
+        /// </summary>
+        Register = 2,
     }
 }

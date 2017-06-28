@@ -1,6 +1,8 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
+using System;
 using BankWPF.Core;
 
 namespace BankWPF
@@ -8,54 +10,30 @@ namespace BankWPF
     /// <summary>
     /// A base page for all pages to gain base functionality
     /// </summary>
-    public class BasePage<VM> : Page
-        where VM : BaseViewModel, new()
+    public class BasePage : Page
     {
-        #region Private Members
-
-        /// <summary>
-        /// The View Model associated with this page
-        /// </summary>
-        private VM mViewModel;
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
-        /// The animation the play when the pages is first loaded
+        /// The animation the play when the page is first loaded
         /// </summary>
         public PageAnimation PageLoadAnimation { get; set; } = PageAnimation.SlideAndFadeInFromRight;
 
         /// <summary>
-        /// The animation the play when the pages is unloaded
+        /// The animation the play when the page is unloaded
         /// </summary>
         public PageAnimation PageUnloadAnimation { get; set; } = PageAnimation.SlideAndFadeOutToLeft;
 
         /// <summary>
         /// The time any slide animation takes to complete
         /// </summary>
-        public float SlideSeconds { get; set; } = 0.8f;
+        public float SlideSeconds { get; set; } = 0.4f;
 
-        public VM ViewModel
-        {
-            get
-            {
-                return mViewModel;
-            }
-            set
-            {
-                // If nothing has changed, return
-                if (mViewModel == value)
-                    return;
-
-                // Update the value
-                mViewModel = value;
-
-                // Set the data context of this page
-                this.DataContext = mViewModel;
-            }
-        }
+        /// <summary>
+        /// The flag to indicate if page should animate out on load
+        /// Useful for when we are moving page to another frame
+        /// </summary>
+        public bool ShouldAnimateOut { get; set; }
 
         #endregion
 
@@ -67,14 +45,11 @@ namespace BankWPF
         public BasePage()
         {
             // If we are animating in, hide to begin with
-            if (this.PageLoadAnimation != PageAnimation.None)
+            if (PageLoadAnimation != PageAnimation.None)
                 Visibility = Visibility.Collapsed;
 
             // Listen out for the page loading
-            this.Loaded += BasePage_Loaded;
-
-            // Create a default View Model
-            this.ViewModel = new VM();
+            Loaded += BasePage_LoadedAsync;
         }
 
         #endregion
@@ -86,52 +61,110 @@ namespace BankWPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void BasePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private async void BasePage_LoadedAsync(object sender, System.Windows.RoutedEventArgs e)
         {
-            // Animate the page in (wait until animation ends)
-            await AnimateIn();
+            // If we are setup to animate out on load
+            if (ShouldAnimateOut)
+                // Animate the page out
+                await AnimateOutAsync();
+            else
+                // Animate the page in
+                await AnimateInAsync();
         }
 
         /// <summary>
-        /// Animates in this page
+        /// Animates the page in
         /// </summary>
         /// <returns></returns>
-        public async Task AnimateIn()
+        public async Task AnimateInAsync()
         {
             // Make sure we have something to do
-            if (this.PageLoadAnimation == PageAnimation.None)
+            if (PageLoadAnimation == PageAnimation.None)
                 return;
 
-            switch (this.PageLoadAnimation)
+            switch (PageLoadAnimation)
             {
                 case PageAnimation.SlideAndFadeInFromRight:
 
                     // Start the animation
-                    await this.SlideAndFadeInFromRight(this.SlideSeconds);
+                    await this.SlideAndFadeInFromRightAsync(SlideSeconds);
 
                     break;
             }
         }
 
         /// <summary>
-        /// Animates out this page
+        /// Animates the page out
         /// </summary>
         /// <returns></returns>
-        public async Task AnimateOut()
+        public async Task AnimateOutAsync()
         {
             // Make sure we have something to do
-            if (this.PageUnloadAnimation == PageAnimation.None)
+            if (PageUnloadAnimation == PageAnimation.None)
                 return;
 
-            switch (this.PageUnloadAnimation)
+            switch (PageUnloadAnimation)
             {
                 case PageAnimation.SlideAndFadeOutToLeft:
 
                     // Start the animation
-                    await this.SlideAndFadeOutToLeft(this.SlideSeconds);
+                    await this.SlideAndFadeOutToLeftAsync(SlideSeconds);
 
                     break;
             }
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// A base page with added ViewModel support
+    /// </summary>
+    public class BasePage<VM> : BasePage
+        where VM : BaseViewModel, new()
+    {
+        #region Private Member
+
+        /// <summary>
+        /// The View Model associated with this page
+        /// </summary>
+        private VM mViewModel;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// The View Model associated with this page
+        /// </summary>
+        public VM ViewModel
+        {
+            get => mViewModel;
+            set
+            {
+                // If nothing has changed, return
+                if (mViewModel == value)
+                    return;
+
+                // Update the value
+                mViewModel = value;
+
+                // Set the data context for this page
+                DataContext = mViewModel;
+            }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public BasePage() : base()
+        {
+            // Create a default view model
+            ViewModel = new VM();
         }
 
         #endregion

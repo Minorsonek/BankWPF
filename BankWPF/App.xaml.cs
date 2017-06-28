@@ -10,7 +10,7 @@ using System.Windows;
 namespace BankWPF
 {
     /// <summary>
-    /// Iteration logic for App.xaml
+    /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {

@@ -17,20 +17,20 @@ namespace BankWPF
         /// <summary>
         /// A single static instance of this value converter
         /// </summary>
-        public static T mConverter = null;
+        private static T Converter = null;
 
         #endregion
 
         #region Markup Extension Methods
 
         /// <summary>
-        /// Provides a static instance of the value converter
+        /// Provides a static instance of the value converter 
         /// </summary>
         /// <param name="serviceProvider">The service provider</param>
         /// <returns></returns>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return mConverter ?? (mConverter = new T());
+            return Converter ?? (Converter = new T());
         }
 
         #endregion

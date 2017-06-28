@@ -1,4 +1,9 @@
 ﻿using BankWPF.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BankWPF
 {
@@ -13,9 +18,9 @@ namespace BankWPF
         /// Singleton instance of the locator
         /// </summary>
         public static ViewModelLocator Instance { get; private set; } = new ViewModelLocator();
-        
+
         /// <summary>
-        /// The actual application view model
+        /// The application view model
         /// </summary>
         public static ApplicationViewModel ApplicationViewModel => IoC.Get<ApplicationViewModel>();
 

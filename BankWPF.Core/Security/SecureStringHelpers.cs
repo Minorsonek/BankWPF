@@ -1,6 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Security;
+using System.Runtime.InteropServices;
 
 namespace BankWPF.Core
 {
@@ -16,7 +20,7 @@ namespace BankWPF.Core
         /// <returns></returns>
         public static string Unsecure(this SecureString secureString)
         {
-            // If we have nothing to do, return
+            // Make sure we have a secure string
             if (secureString == null)
                 return string.Empty;
 

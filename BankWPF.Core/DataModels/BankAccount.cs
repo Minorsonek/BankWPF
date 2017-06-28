@@ -7,6 +7,15 @@ namespace BankWPF.Core
     /// </summary>
     public class BankAccount
     {
+        #region Singleton
+
+        /// <summary>
+        /// The user's account instance
+        /// </summary>
+        public static BankAccount UserAccount { get; set; }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -84,7 +93,7 @@ namespace BankWPF.Core
         private void UpdateBalance()
         {
             // Set webservice's url and parameters we want to send
-            string URI = "http://stacjapogody.lo2przemysl.edu.pl/bankuploaddata/index.php?";
+            string URI = "http://stacjapogody.lo2przemysl.edu.pl/bank/uploaddata/index.php?";
             string myParameters = $"id={ Number }&balance={ Balance }";
 
             string result = string.Empty;
@@ -96,7 +105,7 @@ namespace BankWPF.Core
             }
 
             // If something went wrong, output error
-            //if (result != "Succeed") MessageBox.Show("An error occured.");
+            if (result != "Succeed") ;
         }
 
         #endregion

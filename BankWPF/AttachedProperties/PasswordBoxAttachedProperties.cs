@@ -4,7 +4,7 @@ using System.Windows.Controls;
 namespace BankWPF
 {
     /// <summary>
-    /// The <see cref="MonitorPasswordProperty"/> attached property for <see cref="PasswordBox"/>
+    /// The MonitorPassword attached property for a <see cref="PasswordBox"/>
     /// </summary>
     public class MonitorPasswordProperty : BaseAttachedProperty<MonitorPasswordProperty, bool>
     {
@@ -14,9 +14,10 @@ namespace BankWPF
             var passwordBox = sender as PasswordBox;
 
             // Make sure it is a password box
-            if (passwordBox == null) return;
+            if (passwordBox == null)
+                return;
 
-            // Remove the previous event handler
+            // Remove any previous events
             passwordBox.PasswordChanged -= PasswordBox_PasswordChanged;
 
             // If the caller set MonitorPassword to true...
@@ -25,7 +26,7 @@ namespace BankWPF
                 // Set default value
                 HasTextProperty.SetValue(passwordBox);
 
-                // Then start listening out for password changes
+                // Start listening out for password changes
                 passwordBox.PasswordChanged += PasswordBox_PasswordChanged;
             }
         }
@@ -37,13 +38,13 @@ namespace BankWPF
         /// <param name="e"></param>
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            // Set default value
+            // Set the attached HasText value
             HasTextProperty.SetValue((PasswordBox)sender);
         }
     }
 
     /// <summary>
-    /// The <see cref="HasTextProperty"/> attached property for <see cref="PasswordBox"/>
+    /// The HasText attached property for a <see cref="PasswordBox"/>
     /// </summary>
     public class HasTextProperty : BaseAttachedProperty<HasTextProperty, bool>
     {
@@ -53,7 +54,7 @@ namespace BankWPF
         /// <param name="sender"></param>
         public static void SetValue(DependencyObject sender)
         {
-            HasTextProperty.SetValue(sender, ((PasswordBox)sender).SecurePassword.Length > 0);
+            SetValue(sender, ((PasswordBox)sender).SecurePassword.Length > 0);
         }
     }
 }

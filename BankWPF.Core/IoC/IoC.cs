@@ -1,10 +1,10 @@
-﻿using System;
-using Ninject;
+﻿using Ninject;
+using System;
 
 namespace BankWPF.Core
 {
     /// <summary>
-    /// The IoC container for out application
+    /// The IoC container for our application
     /// </summary>
     public static class IoC
     {
@@ -21,30 +21,30 @@ namespace BankWPF.Core
 
         /// <summary>
         /// Sets up the IoC container, binds all information required and is ready for use
-        /// NOTE: Must be called as soon as your application starts up to ensure all services
-        ///       can be found
+        /// NOTE: Must be called as soon as your application starts up to ensure all 
+        ///       services can be found
         /// </summary>
         public static void Setup()
         {
             // Bind all required view models
             BindViewModels();
         }
-        
+
         /// <summary>
         /// Binds all singleton view models
         /// </summary>
         private static void BindViewModels()
         {
-            // Bind to a single instance of ApplicationViewModel
+            // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
         }
 
         #endregion
 
         /// <summary>
-        /// Gets a service from the IoC, of the specyfied type
+        /// Get's a service from the IoC, of the specified type
         /// </summary>
-        /// <typeparam name="T">Type to get</typeparam>
+        /// <typeparam name="T">The type to get</typeparam>
         /// <returns></returns>
         public static T Get<T>()
         {

@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Data;
 
 namespace BankWPF
 {
@@ -11,14 +10,6 @@ namespace BankWPF
     /// </summary>
     public class ApplicationPageValueConverter : BaseValueConverter<ApplicationPageValueConverter>
     {
-        /// <summary>
-        /// Converts the <see cref="ApplicationPage"/> to an actual view/page
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // Find the appropriate page
@@ -26,8 +17,13 @@ namespace BankWPF
             {
                 case ApplicationPage.Login:
                     return new LoginPage();
+
+                case ApplicationPage.Register:
+                    return new RegisterPage();
+
                 case ApplicationPage.Main:
                     return new MainPage();
+
                 default:
                     Debugger.Break();
                     return null;

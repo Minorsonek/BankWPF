@@ -88,6 +88,15 @@ namespace BankWPF
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// The size and position of the current monitor the window is on
+        /// </summary>
+        public Rectangle CurrentMonitorSize { get; set; } = new Rectangle();
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -244,9 +253,8 @@ namespace BankWPF
         private void WmGetMinMaxInfo(System.IntPtr hwnd, System.IntPtr lParam)
         {
             // Get the point position to determine what screen we are on
-            POINT lMousePosition;
-            GetCursorPos(out lMousePosition);
-
+            GetCursorPos(out POINT lMousePosition);
+            
             // Get the primary monitor at cursor position 0,0
             var lPrimaryScreen = MonitorFromPoint(new POINT(0, 0), MonitorOptions.MONITOR_DEFAULTTOPRIMARY);
 
@@ -284,6 +292,9 @@ namespace BankWPF
                 lMmi.ptMaxSize.X = lPrimaryScreenInfo.rcMonitor.Right - lPrimaryScreenInfo.rcMonitor.Left;
                 lMmi.ptMaxSize.Y = lPrimaryScreenInfo.rcMonitor.Bottom - lPrimaryScreenInfo.rcMonitor.Top;
             }
+
+            // Set monitor size
+            CurrentMonitorSize = new Rectangle(lMmi.ptMaxPosition.X, lMmi.ptMaxPosition.Y, lMmi.ptMaxSize.X + lMmi.ptMaxPosition.X, lMmi.ptMaxSize.Y + lMmi.ptMaxPosition.Y);
 
             // Set min size
             var minSize = mTransformToDevice.Transform(new Point(mWindow.MinWidth, mWindow.MinHeight));
