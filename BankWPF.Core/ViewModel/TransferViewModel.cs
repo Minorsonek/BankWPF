@@ -51,6 +51,11 @@ namespace BankWPF.Core
         /// </summary>
         public bool ErrorWrongValue { get; set; }
 
+        /// <summary>
+        /// A flag indicating if the user was not found
+        /// </summary>
+        public bool ErrorUserNotFound { get; set; }
+
         #endregion
 
         #region Commands
@@ -106,6 +111,7 @@ namespace BankWPF.Core
                 ErrorNotInteger = false;
                 ErrorNotEnoughMoney = false;
                 ErrorWrongValue = false;
+                ErrorUserNotFound = false;
 
                 int valueToTransfer = 0;
 
@@ -131,8 +137,13 @@ namespace BankWPF.Core
                     return;
                 }
 
-                // Transfer value
-                BankAccount.UserAccount.Transfer(valueToTransfer, InputUser);
+                // Transfer value - listen for output
+                string output = BankAccount.UserAccount.Transfer(valueToTransfer, InputUser);
+
+                // If output isnt Success, then user was not found
+                if (output != "Success") ErrorUserNotFound = true;
+
+                // TODO: Inform user about successful operation
 
                 // Update new balance
                 BalanceString = BankAccount.UserAccount.Balance.ToString();

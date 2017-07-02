@@ -49,7 +49,7 @@
                         <!-- Textbox for user's input value -->
                         <TextBox Grid.Row="0" Text="{Binding InputValue}" Tag="Enter value here" />
 
-                        <!-- Textbox for user's message -->
+                        <!-- Textbox for login to transfer to -->
                         <TextBox Grid.Row="1" Text="{Binding InputUser}" Tag="Enter user here (login)" />
 
                         <!-- Buttons -->
@@ -91,6 +91,14 @@
                             FontSize="{StaticResource FontSizeRegular}"
                             Foreground="{StaticResource WordRedBrush}"
                             Visibility="{Binding ErrorWrongValue, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}"
+                            />
+
+                        <!-- Error message if the user wasnt found -->
+                        <TextBlock Text="User was not found." 
+                            Grid.Row="2"
+                            FontSize="{StaticResource FontSizeRegular}"
+                            Foreground="{StaticResource WordRedBrush}"
+                            Visibility="{Binding ErrorUserNotFound, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}"
                             />
 
                     </Grid>

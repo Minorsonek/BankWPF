@@ -22,11 +22,6 @@ namespace BankWPF.Core
         public string InputValue { get; set; }
 
         /// <summary>
-        /// The user's input message
-        /// </summary>
-        public string InputMessage { get; set; }
-
-        /// <summary>
         /// Current user's balance converted to string to display
         /// </summary>
         public string BalanceString { get; set; } = "0";
@@ -136,10 +131,12 @@ namespace BankWPF.Core
                 }
 
                 // Deposit value
-                BankAccount.UserAccount.Deposit(valueToDeposit, InputMessage);
+                BankAccount.UserAccount.Deposit(valueToDeposit);
 
                 // Update new balance
                 BalanceString = BankAccount.UserAccount.Balance.ToString();
+
+                // TODO: Inform user about successful operation
             });
         }
 
@@ -184,10 +181,12 @@ namespace BankWPF.Core
                 }
 
                 // Withdraw value
-                BankAccount.UserAccount.Withdraw(valueToWithdraw, InputMessage);
+                BankAccount.UserAccount.Withdraw(valueToWithdraw);
 
                 // Update new balance
                 BalanceString = BankAccount.UserAccount.Balance.ToString();
+
+                // TODO: Inform user about successful operation
             });
         }
 

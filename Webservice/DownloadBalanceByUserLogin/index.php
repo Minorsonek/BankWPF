@@ -24,7 +24,7 @@
           	$row = mysqli_fetch_assoc($result);
 			
 			// Output balance and id
-			echo $row['balance']."/".$row['id'];
+			echo $row['currency']."/".$row['id'];
 		}
 	}
 	catch (Exception $ex)

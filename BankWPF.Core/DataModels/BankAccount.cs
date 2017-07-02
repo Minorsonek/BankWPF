@@ -74,16 +74,13 @@ namespace BankWPF.Core
         /// Deposits the specified value
         /// </summary>
         /// <param name="value">The value user wants to deposit</param>
-        public void Deposit(int value, string message)
+        public void Deposit(int value)
         {
             // Add value to balance
             Balance += value;
 
-            // Inform user about successful operation
-            //MessageBox.Show($"Zdepozytowano { value } zł.");
-
             // Upload new transaction to the database
-            UploadNewTransaction("Deposit", value, message);
+            UploadNewTransaction(Number, "Deposit", value, "Deposit");
 
             // Update current balance to the database
             UpdateBalance(Number, Balance);
@@ -93,7 +90,7 @@ namespace BankWPF.Core
         /// Withdraw the specified value
         /// </summary>
         /// <param name="value">The value user wants to withdraw</param>
-        public void Withdraw(int value, string message)
+        public void Withdraw(int value)
         {
             // Check if value is greater than balance, if yes, withdraw the whole cash
             if (value > Balance) value = Balance;
@@ -102,13 +99,10 @@ namespace BankWPF.Core
             Balance -= value;
 
             // Upload new transaction to the database
-            UploadNewTransaction("Withdraw", value, message);
+            UploadNewTransaction(Number, "Withdraw", value, "Withdraw");
 
             // Update current balance to database
             UpdateBalance(Number, Balance);
-
-            // Inform user about successful operation
-            //MessageBox.Show($"Wyplacono { value } zł.");
         }
 
         /// <summary>
@@ -116,33 +110,33 @@ namespace BankWPF.Core
         /// </summary>
         /// <param name="value">The value user wants to transfer</param>
         /// <param name="login">The user to transfer to</param>
-        public void Transfer(int value, string login)
+        public string Transfer(int value, string login)
         {
             // Check if value is greater than balance, if yes, transfer the whole cash
             if (value > Balance) value = Balance;
 
+            // Try to transfer money to specified account
+            if (!TransferMoneyTo(value, login)) return "User not found";
+
             // Substract value from balance
             Balance -= value;
-
-            // Upload new transaction to the database
-            TransferMoneyTo(value, login);
 
             // Update current balance to database
             UpdateBalance(Number, Balance);
 
-            // Inform user about successful operation
-            //MessageBox.Show($"Wyplacono { value } zł.");
+            // Successful operation
+            return "Success";
         }
 
         #endregion
 
         #region Private Helpers
 
-        private void UploadNewTransaction(string paymentway, int value, string message)
+        private void UploadNewTransaction(int id,string paymentway, int value, string message)
         {
             // Set webservice's url and parameters we want to send
             string URI = "http://stacjapogody.lo2przemysl.edu.pl/bank/savetohistory/index.php?";
-            string myParameters = $"id={ Number }&depOrWit={ paymentway }&value={ value }&message={ message }";
+            string myParameters = $"id={ id }&depOrWit={ paymentway }&value={ value }&message={ message }";
 
             string result = string.Empty;
             // Send request to webservice
@@ -180,16 +174,28 @@ namespace BankWPF.Core
         /// <summary>
         /// Balance in database updater
         /// </summary>
-        private void TransferMoneyTo(int value, string login)
+        private bool TransferMoneyTo(int value, string login)
         {
             // Get user balance and id by its login
             var userData = DownloadUserBalance(login);
 
-            // Add value to this
+            // If id equals 0, user not found - return false
+            if (userData.id == 0) return false;
+
+            // Add value to specified user balance
             userData.balance += value;
+
+            // Upload new transaction to the database about user's withdraw
+            UploadNewTransaction(Number, "Withdraw", value, login);
+
+            // Upload new transaction to the database about specified user deposit
+            UploadNewTransaction(userData.id, "Deposit", value, Name);
 
             // Upload new balance
             UpdateBalance(userData.id, userData.balance);
+
+            // Successful operation, return true
+            return true;
         }
 
         private BalanceIdPair DownloadUserBalance(string login)
