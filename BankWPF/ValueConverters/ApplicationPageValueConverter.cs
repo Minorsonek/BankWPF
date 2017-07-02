@@ -24,6 +24,9 @@ namespace BankWPF
                 case ApplicationPage.Main:
                     return new MainPage();
 
+                case ApplicationPage.Transfer:
+                    return new TransferPage();
+
                 default:
                     Debugger.Break();
                     return null;

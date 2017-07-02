@@ -7,6 +7,7 @@
 	$idaccount = $_POST['id'];
 	$paymentway = $_POST['depOrWit'];
 	$amount = $_POST['value'];
+	$message = $_POST['message'];
 	
 	try
 	{
@@ -18,7 +19,7 @@
 		else
 		{
 			// Connected with database, try to find user
-			$result = $connection->query("INSERT INTO transactions VALUES (NULL, '$idaccount', '$paymentway', '$amount', now())");
+			$result = $connection->query("INSERT INTO transactions VALUES (NULL, '$idaccount', '$paymentway', '$amount', '$message', now())");
 			// If failed to send query, throw exception
 			if (!$result) throw new Exception($connection->error);
 			

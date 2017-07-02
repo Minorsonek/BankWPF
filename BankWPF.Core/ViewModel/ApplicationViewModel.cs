@@ -31,7 +31,7 @@ namespace BankWPF.Core
             CurrentPage = page;
 
             // Show side menu or not?
-            SideMenuVisible = page == ApplicationPage.Main;
+            SideMenuVisible = page == ApplicationPage.Main || page == ApplicationPage.Transfer;
         }
     }
 }

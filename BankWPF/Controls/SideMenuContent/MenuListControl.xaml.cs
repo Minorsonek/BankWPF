@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using BankWPF.Core;
+using System.Windows.Controls;
 
 namespace BankWPF
 {

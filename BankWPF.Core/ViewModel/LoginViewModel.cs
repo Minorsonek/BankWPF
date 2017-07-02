@@ -194,19 +194,21 @@ namespace BankWPF.Core
                 string TransactionMethod = dataArray[0];
                 // The transaction's value (positive or negative - depends on payment way)
                 string TransactionValue = TransactionMethod == "Deposit" ? dataArray[1] : "-" + dataArray[1];
+                // The transaction's message
+                string TransactionMessage = dataArray[2];
                 // The transaction's date
-                string TransactionDate = dataArray[2];
-                
+                string TransactionDate = dataArray[3];
+                /*
                 MenuListViewModel.Items.Add(
                     new MenuListItemViewModel
                     {
                         Value = TransactionValue,
                         DWLetter = TransactionMethod == "Deposit" ? "D" : "W",
-                        Message = "Temporary something",
+                        Message = TransactionMessage,
                         ColorStringRGB = TransactionMethod == "Deposit" ? "00d405" : "fe4503",
                         Date = TransactionDate
                     }
-                    );
+                    );*/
             }
         }
 

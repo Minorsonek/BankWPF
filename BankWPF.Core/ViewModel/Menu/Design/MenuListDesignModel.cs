@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace BankWPF.Core
 {
@@ -24,33 +28,46 @@ namespace BankWPF.Core
         /// </summary>
         public MenuListDesignModel()
         {
-            Items = new List<MenuListItemViewModel>
+            var res = "Found: 2|Withdraw/125/Sniadanie/2017-06-28 14:13:27|Deposit/125/Obiad/2017-06-28 12:03:46|";
+
+            Items = new ObservableCollection<MenuListItemViewModel>();
+
+            AddTransactionsToList(res);
+        }
+
+        private void AddTransactionsToList(string result)
+        {
+            // Split rows
+            string[] rowArray = result.Split('|');
+
+            // Get the amount of transactions (-1 from last empty row)
+            int amount = rowArray.GetLength(0) - 1;
+
+            for (int i = 1; i < amount; i++)
             {
-                new MenuListItemViewModel
-                {
-                    Value = "500",
-                    DWLetter = "D",
-                    Message = "This chat app is awesome! I bet it will be fast too",
-                    ColorStringRGB = "00d405",
-                    Date = "2017/11/20 09:06:18"
-                },
-                new MenuListItemViewModel
-                {
-                    Value = "-500",
-                    DWLetter = "W",
-                    Message = "Hey dude, here are the new icons",
-                    ColorStringRGB = "fe4503",
-                    Date = "2017/11/20 09:06:18"
-                },
-                new MenuListItemViewModel
-                {
-                    Value = "300",
-                    DWLetter = "D",
-                    Message = "The new server is up, got 192.168.1.1",
-                    ColorStringRGB = "00d405",
-                    Date = "2017/11/20 11:06:18"
-                },
-            };
+                // Prepare data
+                // Split original row
+                string[] dataArray = rowArray[i].Split('/');
+                // The transaction's payment way
+                string TransactionMethod = dataArray[0];
+                // The transaction's value (positive or negative - depends on payment way)
+                string TransactionValue = TransactionMethod == "Deposit" ? dataArray[1] : "-" + dataArray[1];
+                // The transaction's message
+                string TransactionMessage = dataArray[2];
+                // The transaction's date
+                string TransactionDate = dataArray[3];
+
+                Items.Add(
+                    new MenuListItemViewModel
+                    {
+                        Value = TransactionValue,
+                        DWLetter = TransactionMethod == "Deposit" ? "D" : "W",
+                        Message = TransactionMessage,
+                        ColorStringRGB = TransactionMethod == "Deposit" ? "00d405" : "fe4503",
+                        Date = TransactionDate
+                    }
+                    );
+            }
         }
 
         #endregion

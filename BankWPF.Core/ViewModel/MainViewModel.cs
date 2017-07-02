@@ -5,6 +5,7 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace BankWPF.Core
 {
@@ -21,9 +22,14 @@ namespace BankWPF.Core
         public string InputValue { get; set; }
 
         /// <summary>
+        /// The user's input message
+        /// </summary>
+        public string InputMessage { get; set; }
+
+        /// <summary>
         /// Current user's balance converted to string to display
         /// </summary>
-        public string BalanceString => BankAccount.UserAccount.Balance.ToString();
+        public string BalanceString { get; set; } = "0";
 
         /// <summary>
         /// A flag indicating if the deposit command is running
@@ -64,6 +70,11 @@ namespace BankWPF.Core
         /// </summary>
         public ICommand WithdrawCommand { get; set; }
 
+        /// <summary>
+        /// The command to change the current page to transfer page
+        /// </summary>
+        public ICommand ToTransferPageCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -76,6 +87,14 @@ namespace BankWPF.Core
             // Create commands
             DepositCommand = new RelayParameterizedCommand(async (parameter) => await DepositAsync(parameter));
             WithdrawCommand = new RelayParameterizedCommand(async (parameter) => await WithdrawAsync(parameter));
+            ToTransferPageCommand = new RelayCommand(async () => await ChangeToTransferPageAsync());
+
+            // Set BalanceString to actual account's balance after some delay
+            Task.Run(async () =>
+            {
+                await Task.Delay(300);
+                BalanceString = BankAccount.UserAccount.Balance.ToString();
+            });
         }
 
         #endregion
@@ -83,13 +102,13 @@ namespace BankWPF.Core
         #region Procedures
 
         /// <summary>
-        /// Attempts to log the user in
+        /// Attempts to deposit money to the user's account
         /// </summary>
         /// <param name="parameter">The <see cref="SecureString"/> passed in from the view for the users password</param>
         /// <returns></returns>
         public async Task DepositAsync(object parameter)
         {
-            // This function will run only if LoginIsRunning is false
+            // This function will run only if DepositIsRunning is false
             await RunCommandAsync(() => DepositIsRunning, async () =>
             {
                 await Task.Delay(500);
@@ -102,31 +121,30 @@ namespace BankWPF.Core
                 int valueToDeposit = 0;
 
                 // Try to parse user's input from textbox to integer
-                if (Int32.TryParse(this.InputValue, out valueToDeposit))
+                if (!Int32.TryParse(this.InputValue, out valueToDeposit))
                 {
-                    // If its greater than 0, deposit
-                    if (valueToDeposit > 0)
-                    {
-                        // Deposit value
-                        BankAccount.UserAccount.Deposit(valueToDeposit);
-                    }
-                    else
-                    {
-                        // Can't deposit negative or null value, output error
-                        ErrorWrongValue = true;
-                    }
-                }
-                else
-                {
-                    // If failed, output error
+                    // If failed, output error and return
                     ErrorNotInteger = true;
+                    return;
+                }
+                // If value is equal or less than 0, output error and return
+                if (valueToDeposit <= 0)
+                {
+                    // Can't transfer negative or null value
+                    ErrorWrongValue = true;
+                    return;
                 }
 
+                // Deposit value
+                BankAccount.UserAccount.Deposit(valueToDeposit, InputMessage);
+
+                // Update new balance
+                BalanceString = BankAccount.UserAccount.Balance.ToString();
             });
         }
 
         /// <summary>
-        /// Takes the user to the register page
+        /// Attempts to withdraw money from user's account
         /// </summary>
         /// <returns></returns>
         public async Task WithdrawAsync(object parameter)
@@ -144,26 +162,45 @@ namespace BankWPF.Core
                 int valueToWithdraw = 0;
 
                 // Try to parse user's input from textbox to integer
-                if (Int32.TryParse(this.InputValue, out valueToWithdraw))
+                if (!Int32.TryParse(this.InputValue, out valueToWithdraw))
                 {
-                    // If its greater than 0, withdraw
-                    if (valueToWithdraw > 0)
-                    {
-                        // Withdraw value
-                        BankAccount.UserAccount.Withdraw(valueToWithdraw);
-                    }
-                    else
-                    {
-                        // Can't withdraw negative or null value, output error
-                        ErrorWrongValue = true;
-                    }
-                }
-                else
-                {
-                    // If failed, output error
+                    // If failed, output error and return
                     ErrorNotInteger = true;
+                    return;
                 }
+                // If value is equal or less than 0, output error and return
+                if (valueToWithdraw <= 0)
+                {
+                    // Can't transfer negative or null value
+                    ErrorWrongValue = true;
+                    return;
+                }
+                // If user balance is 0, output error and return
+                if (BankAccount.UserAccount.Balance == 0)
+                {
+                    // Can't do anything with 0 balance
+                    ErrorNotEnoughMoney = true;
+                    return;
+                }
+
+                // Withdraw value
+                BankAccount.UserAccount.Withdraw(valueToWithdraw, InputMessage);
+
+                // Update new balance
+                BalanceString = BankAccount.UserAccount.Balance.ToString();
             });
+        }
+
+        /// <summary>
+        /// Takes the user to the transfer page
+        /// </summary>
+        /// <returns></returns>
+        public async Task ChangeToTransferPageAsync()
+        {
+            // Go to transfer page
+            IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.Transfer);
+
+            await Task.Delay(1);
         }
 
         #endregion

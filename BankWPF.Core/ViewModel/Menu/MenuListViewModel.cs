@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace BankWPF.Core
 {
@@ -10,6 +11,6 @@ namespace BankWPF.Core
         /// <summary>
         /// The menu list items for the list
         /// </summary>
-        public static List<MenuListItemViewModel> Items { get; set; }  
+        public ObservableCollection<MenuListItemViewModel> Items { get; set; }  
     }
 }

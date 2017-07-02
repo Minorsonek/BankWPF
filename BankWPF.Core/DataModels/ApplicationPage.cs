@@ -16,8 +16,13 @@
         Main = 1,
 
         /// <summary>
+        /// The money transfer page
+        /// </summary>
+        Transfer = 2,
+
+        /// <summary>
         /// The register page
         /// </summary>
-        Register = 2,
+        Register = 3,
     }
 }

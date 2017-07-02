@@ -68,7 +68,7 @@ namespace BankWPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Fasetto.Word;component/controls/pagehost.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BankWPF;component/controls/pagehost.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Controls\PageHost.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -30,7 +30,7 @@
 			for ($i = 1; $i <= $amount; $i++) 
 			{
 				$row = mysqli_fetch_assoc($result);
-				echo $row['paymentway']."/".$row['value']."/".$row['date']."|";
+				echo $row['paymentway']."/".$row['value']."/".$row['message']."/".$row['date']."|";
 			}
 		}
 	}
