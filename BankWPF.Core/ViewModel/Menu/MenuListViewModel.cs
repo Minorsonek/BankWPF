@@ -11,6 +11,6 @@ namespace BankWPF.Core
         /// <summary>
         /// The menu list items for the list
         /// </summary>
-        public ObservableCollection<MenuListItemViewModel> Items { get; set; }  
+        public static ObservableCollection<MenuListItemViewModel> Items { get; set; }  
     }
 }

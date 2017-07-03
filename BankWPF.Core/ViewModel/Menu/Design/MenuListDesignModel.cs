@@ -28,11 +28,7 @@ namespace BankWPF.Core
         /// </summary>
         public MenuListDesignModel()
         {
-            var res = "Found: 2|Withdraw/125/Sniadanie/2017-06-28 14:13:27|Deposit/125/Obiad/2017-06-28 12:03:46|";
-
             Items = new ObservableCollection<MenuListItemViewModel>();
-
-            AddTransactionsToList(res);
         }
 
         private void AddTransactionsToList(string result)

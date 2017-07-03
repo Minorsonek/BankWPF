@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{x:Static core:MenuListDesignModel.Instance}" Background="{StaticResource ForegroundLightBrush}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Instance.Itemsy}">
+            <ItemsControl ItemsSource="{Binding Instance.Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:MenuListItemControl />
